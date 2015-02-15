@@ -57,9 +57,9 @@ public class GeofenceNotification {
 				.setContentText(notificationText).setAutoCancel(true);
 
 		notification = notificationBuilder.build();
-//		notification.defaults |= Notification.DEFAULT_LIGHTS;
-//		notification.defaults |= Notification.DEFAULT_SOUND;
-//		notification.defaults |= Notification.DEFAULT_VIBRATE;
+		notification.defaults |= Notification.DEFAULT_LIGHTS;
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.defaults |= Notification.DEFAULT_VIBRATE;
 	}
 
 	public void displayNotification(SimpleGeofence simpleGeofence,

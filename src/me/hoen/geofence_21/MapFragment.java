@@ -10,7 +10,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,8 +32,6 @@ public class MapFragment extends Fragment {
 	protected SupportMapFragment mapFragment;
 	protected GoogleMap map;
 	protected Marker myPositionMarker;
-
-	protected FragmentManager fragmentManager;
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -53,35 +52,24 @@ public class MapFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		fragmentManager = getFragmentManager();
 		setRetainInstance(true);
 		setHasOptionsMenu(true);
+
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d(MainActivity.TAG, "oncreateview");
+
 		View rootView = inflater.inflate(R.layout.fragment_map, container,
 				false);
-		FragmentManager childFragmentManager = getChildFragmentManager();
-		mapFragment = (SupportMapFragment) childFragmentManager
-				.findFragmentById(R.id.map);
-		if (mapFragment != null) {
-			map = mapFragment.getMap();
-			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 
-				@Override
-				public void onMapLoaded() {
-					map.animateCamera(CameraUpdateFactory.zoomTo(15));
-					displayGeofences();
-				}
-			});
-		} else {
-			Log.d(MainActivity.TAG, "fragment is null");
-		}
+		mapFragment = SupportMapFragment.newInstance();
+		FragmentTransaction fragmentTransaction = getChildFragmentManager()
+				.beginTransaction();
+		fragmentTransaction.add(R.id.map_container, mapFragment);
+		fragmentTransaction.commit();
 
 		return rootView;
 	}
@@ -96,6 +84,19 @@ public class MapFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (mapFragment != null) {
+			mapFragment.getMapAsync(new OnMapReadyCallback() {
+
+				@Override
+				public void onMapReady(GoogleMap googleMap) {
+					map = googleMap;
+					map.animateCamera(CameraUpdateFactory.zoomTo(15));
+					displayGeofences();
+				}
+			});
+		} else {
+			Log.d(MainActivity.TAG, "fragment is null");
+		}
 
 		getActivity().registerReceiver(receiver,
 				new IntentFilter("me.hoen.geofence_21.geolocation.service"));
@@ -145,10 +146,12 @@ public class MapFragment extends Fragment {
 		case R.id.events:
 			Fragment f = new EventsFragment();
 
-			fragmentManager.beginTransaction().replace(android.R.id.content, f)
-					.addToBackStack("events").commit();
+			getFragmentManager().beginTransaction()
+					.replace(android.R.id.content, f).addToBackStack("events")
+					.commit();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

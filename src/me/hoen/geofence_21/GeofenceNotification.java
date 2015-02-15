@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
 
@@ -47,19 +48,18 @@ public class GeofenceNotification {
 					notificationTextParams);
 			break;
 		}
+		Log.d(MainActivity.TAG, notificationText);
 
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
 				context)
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle(context.getString(R.string.app_name))
-				.setStyle(
-						new NotificationCompat.BigTextStyle()
-								.bigText(notificationText)).setAutoCancel(true);
+				.setContentText(notificationText).setAutoCancel(true);
 
 		notification = notificationBuilder.build();
-		notification.defaults |= Notification.DEFAULT_LIGHTS;
-		notification.defaults |= Notification.DEFAULT_SOUND;
-		notification.defaults |= Notification.DEFAULT_VIBRATE;
+//		notification.defaults |= Notification.DEFAULT_LIGHTS;
+//		notification.defaults |= Notification.DEFAULT_SOUND;
+//		notification.defaults |= Notification.DEFAULT_VIBRATE;
 	}
 
 	public void displayNotification(SimpleGeofence simpleGeofence,

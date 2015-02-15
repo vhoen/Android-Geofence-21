@@ -1,7 +1,5 @@
 package me.hoen.geofence_21;
 
-import com.google.android.gms.location.Geofence;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -28,11 +26,11 @@ public class MainActivity extends ActionBarActivity {
 		Fragment f = new MapFragment();
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager.beginTransaction().add(android.R.id.content, f, "home")
-				.commit();
+		fragmentManager.beginTransaction()
+				.replace(android.R.id.content, f, "home").commit();
 		fragmentManager.executePendingTransactions();
 
-		 startGeolocationService(getApplicationContext());
+		startGeolocationService(getApplicationContext());
 
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(GeolocationService.ACTION_GEOFENCES_ERROR);

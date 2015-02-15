@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,8 +28,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment {
+	protected SupportMapFragment mapFragment;
 	protected GoogleMap map;
 	protected Marker myPositionMarker;
+
+	protected FragmentManager fragmentManager;
 
 	private BroadcastReceiver receiver = new BroadcastReceiver() {
 
@@ -46,13 +52,22 @@ public class MapFragment extends Fragment {
 	};
 
 	@Override
-	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		fragmentManager = getFragmentManager();
+		setRetainInstance(true);
+		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Log.d(MainActivity.TAG, "oncreateview");
 		View rootView = inflater.inflate(R.layout.fragment_map, container,
 				false);
-
-		FragmentManager fragmentManager = getChildFragmentManager();
-		SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager
+		FragmentManager childFragmentManager = getChildFragmentManager();
+		mapFragment = (SupportMapFragment) childFragmentManager
 				.findFragmentById(R.id.map);
 		if (mapFragment != null) {
 			map = mapFragment.getMap();
@@ -64,6 +79,8 @@ public class MapFragment extends Fragment {
 					displayGeofences();
 				}
 			});
+		} else {
+			Log.d(MainActivity.TAG, "fragment is null");
 		}
 
 		return rootView;
@@ -85,11 +102,12 @@ public class MapFragment extends Fragment {
 	}
 
 	protected void displayGeofences() {
-		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance().getSimpleGeofences();
+		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore
+				.getInstance().getSimpleGeofences();
 
-		for(Map.Entry<String, SimpleGeofence>item : geofences.entrySet()){
+		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
 			SimpleGeofence sg = item.getValue();
-			
+
 			CircleOptions circleOptions1 = new CircleOptions()
 					.center(new LatLng(sg.getLatitude(), sg.getLongitude()))
 					.radius(sg.getRadius()).strokeColor(Color.BLACK)
@@ -114,4 +132,23 @@ public class MapFragment extends Fragment {
 		myPositionMarker.setPosition(latLng);
 	}
 
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+
+		inflater.inflate(R.menu.menu_map, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.events:
+			Fragment f = new EventsFragment();
+
+			fragmentManager.beginTransaction().replace(android.R.id.content, f)
+					.addToBackStack("events").commit();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

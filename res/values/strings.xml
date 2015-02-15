@@ -5,5 +5,8 @@
 	<string name="geofence_enter">Now entering %1$s</string>
 	<string name="geofence_dwell">Dwelling in %1$s</string>
 	<string name="geofence_exit">Now exiting %1$s</string>
+	<string name="events">Events</string>
+	<string name="map">Map</string>
+	<string name="transition">Transition</string>
 
 </resources>

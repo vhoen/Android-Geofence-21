@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gf21="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/go_to_map"
+        android:icon="@drawable/ic_menu_map"
+        android:title="@string/map"
+        gf21:showAsAction="always"/>
+
+</menu>

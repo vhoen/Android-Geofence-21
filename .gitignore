@@ -28,3 +28,4 @@ proguard/
 # Config Files 
 AndroidManifest.xml
 src/me/hoen/geofence_21/SimpleGeofenceStore.java
+project.properties

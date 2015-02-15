@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Geofence-21</string>
+	<string name="geofence_enter">Now entering %1$s</string>
+	<string name="geofence_dwell">Dwelling in %1$s</string>
+	<string name="geofence_exit">Now exiting %1$s</string>
+
+</resources>

@@ -1,7 +1,7 @@
 # Install
 
-- Rename [AndroidManifest.xml.dist](./AndroidManifest.xml.dist) to [AndroidManifest.xml](./AndroidManifest.xml)
-- Rename [AndroidSimpleGeofenceStore.xml.dist](./src/me/hoen/geofence_21/SimpleGeofenceStore.java.dist) to [AndroidSimpleGeofenceStore.xml](./src/me/hoen/geofence_21/SimpleGeofenceStore.java)
+- Rename [AndroidManifest.xml.dist](./AndroidManifest.xml.dist) to AndroidManifest.xml
+- Rename [AndroidSimpleGeofenceStore.xml.dist](./src/me/hoen/geofence_21/SimpleGeofenceStore.java.dist) to src/me/hoen/geofence_21/SimpleGeofenceStore.java
 - Add android-support-v4.jar in "libs"
 - Set up Google Play Services
 - Add your Google maps API KEY in the ./AndroidManifest.

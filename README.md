@@ -1,6 +1,8 @@
 # Geofencing step by step
 
-I spent a lot of time [making geofencing work]("https://github.com/vhoen/AndroidGeofencing") with Android API level 19. Unfortunately, Google has deprecated LocationClient,replaced it by [LocationRequest]("https://developer.android.com/reference/com/google/android/gms/location/LocationRequest.html"). In the process the Geofencing documentation disappeared. With a bit of digging, I found a StackOverflow post with a working example.
+I spent a lot of time [making geofencing work]("https://github.com/vhoen/AndroidGeofencing") with Android API level 19. Unfortunately, Google has deprecated LocationClient, replaced it by [LocationRequest]("https://developer.android.com/reference/com/google/android/gms/location/LocationRequest.html"). In the process the Geofencing documentation disappeared. With a bit of digging, I found a StackOverflow post with a working example.
+
+Here is a working example on how to use the Geofencing API : 
 
 
 ## [Creating a SimpleGeofence type](./src/me/hoen/geofence_21/SimpleGeofence.java)

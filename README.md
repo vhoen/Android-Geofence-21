@@ -65,13 +65,14 @@ public class SimpleGeofenceStore {
 ```
 
 ## [Displaying a map](./src/me/hoen/geofence_21/MapFragment.java)
-#res/layout/fragment_map.xml
 ```xml
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+#!res/layout/fragment_map.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/map_container" >
+</LinearLayout>
 ```
 
 ```java
@@ -79,26 +80,35 @@ public class MapFragment extends Fragment {
     protected GoogleMap map;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_map, container,
                 false);
 
-        FragmentManager fragmentManager = getChildFragmentManager();
-        SupportMapFragment mapFragment = (SupportMapFragment) fragmentManager
-                .findFragmentById(R.id.map);
+        mapFragment = SupportMapFragment.newInstance();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager()
+                .beginTransaction();
+        fragmentTransaction.add(R.id.map_container, mapFragment);
+        fragmentTransaction.commit();
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (mapFragment != null) {
-            map = mapFragment.getMap();
-            map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            mapFragment.getMapAsync(new OnMapReadyCallback() {
 
                 @Override
-                public void onMapLoaded() {
+                public void onMapReady(GoogleMap googleMap) {
+                    map = googleMap;
                     map.animateCamera(CameraUpdateFactory.zoomTo(15));
+                    displayGeofences();
                 }
             });
         }
-
-        return rootView;
     }
 }
 ```

@@ -124,10 +124,11 @@ public class MapFragment extends Fragment {
 	protected void updateMarker(Double latitude, Double longitude) {
 		if (myPositionMarker == null) {
 			createMarker(latitude, longitude);
+		} else {
+			LatLng latLng = new LatLng(latitude, longitude);
+			myPositionMarker.setPosition(latLng);
+			map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 		}
-
-		LatLng latLng = new LatLng(latitude, longitude);
-		myPositionMarker.setPosition(latLng);
 	}
 
 	@Override

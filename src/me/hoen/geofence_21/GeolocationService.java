@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationServices;
 public class GeolocationService extends Service implements ConnectionCallbacks,
 		OnConnectionFailedListener, LocationListener {
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 	protected GoogleApiClient mGoogleApiClient;
 	protected LocationRequest mLocationRequest;
 
@@ -124,11 +124,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 		if (!MainActivity.geofencesAlreadyRegistered) {
 			registerGeofences();
-		}
-
-		if (location.getAccuracy() <= 50) {
-			Log.d(MainActivity.TAG, "Stopping geolocation service");
-			stopSelf();
 		}
 	}
 

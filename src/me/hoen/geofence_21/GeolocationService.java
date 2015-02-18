@@ -29,20 +29,17 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 	private PendingIntent mPendingIntent;
 
-	public static final String ACTION_GEOFENCES_ERROR = "me.hoen.geofence_21.ACTION_GEOFENCES_ERROR";
-	public static final String ACTION_GEOFENCES_SUCCESS = "me.hoen.geofence_21.ACTION_GEOFENCES_SUCCESS";
-
 	@Override
 	public void onStart(Intent intent, int startId) {
 		buildGoogleApiClient();
 
 		mGoogleApiClient.connect();
-
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+
 		if (mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.disconnect();
 		}

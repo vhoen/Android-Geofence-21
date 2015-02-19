@@ -2,11 +2,17 @@
 <resources>
 
     <string name="app_name">Geofence-21</string>
-	<string name="geofence_enter">Now entering %1$s</string>
-	<string name="geofence_dwell">Dwelling in %1$s</string>
-	<string name="geofence_exit">Now exiting %1$s</string>
-	<string name="events">Events</string>
-	<string name="map">Map</string>
-	<string name="transition">Transition</string>
+    <string name="geofence_enter">Now entering %1$s</string>
+    <string name="geofence_dwell">Dwelling in %1$s</string>
+    <string name="geofence_exit">Now exiting %1$s</string>
+    <string name="events">Events</string>
+    <string name="map">Map</string>
+    <string name="transition">Transition</string>
+    <string name="geofence_not_available">Geofence service is not available now</string>
+    <string name="geofence_too_many_geofences">App registered too many geofences</string>
+    <string name="geofence_too_many_pending_intents">Too many PendingIntents provided</string>
+    <string name="unknown_geofence_error">Unknown error</string>
+    <string name="geofences_added">Geofences added</string>
+    <string name="geofences_removed">Geofences removed</string>
 
 </resources>

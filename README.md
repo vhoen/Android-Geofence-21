@@ -501,3 +501,4 @@ public class MainActivity extends ActionBarActivity {
 ### Sources
 - [Receiving Location Updates](http://developer.android.com/training/location/receive-location-updates.html)
 - [Sample on StackOverflow](http://stackoverflow.com/questions/27866649/geofence-android-pendingintent-doesnt-trigger-intentservice)
+- [Sample on GitHub](https://github.com/googlesamples/android-play-location/tree/master/Geofencing)

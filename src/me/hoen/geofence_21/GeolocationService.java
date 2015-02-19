@@ -5,23 +5,29 @@ import java.util.Map;
 
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 public class GeolocationService extends Service implements ConnectionCallbacks,
-		OnConnectionFailedListener, LocationListener {
+		OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 	protected GoogleApiClient mGoogleApiClient;
@@ -43,6 +49,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		if (mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.disconnect();
 		}
+
 	}
 
 	protected void registerGeofences() {
@@ -67,7 +74,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		mPendingIntent = requestPendingIntent();
 
 		LocationServices.GeofencingApi.addGeofences(mGoogleApiClient,
-				geofencingRequest, mPendingIntent);
+				geofencingRequest, mPendingIntent).setResultCallback(this);
 
 		MainActivity.geofencesAlreadyRegistered = true;
 	}
@@ -157,6 +164,34 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
+	}
+
+	public void onResult(Status status) {
+		if (status.isSuccess()) {
+			Toast.makeText(getApplicationContext(),
+					getString(R.string.geofences_added), Toast.LENGTH_SHORT)
+					.show();
+		} else {
+			MainActivity.geofencesAlreadyRegistered = false;
+			String errorMessage = getErrorString(this, status.getStatusCode());
+			Toast.makeText(getApplicationContext(), errorMessage,
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	public static String getErrorString(Context context, int errorCode) {
+		Resources mResources = context.getResources();
+		switch (errorCode) {
+		case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
+			return mResources.getString(R.string.geofence_not_available);
+		case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
+			return mResources.getString(R.string.geofence_too_many_geofences);
+		case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
+			return mResources
+					.getString(R.string.geofence_too_many_pending_intents);
+		default:
+			return mResources.getString(R.string.unknown_geofence_error);
+		}
 	}
 
 }

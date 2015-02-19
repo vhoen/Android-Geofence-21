@@ -52,7 +52,7 @@
         </service>
 
         <receiver
-            android:name="me.hoen.geofence_21.GeofenceSampleReceiver"
+            android:name=".GeofenceReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="me.hoen.geofence_21.ACTION_RECEIVE_GEOFENCE" />

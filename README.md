@@ -159,6 +159,15 @@ public class MapFragment extends Fragment {
 ```
 
 ## [Creating a service fetching current location](./src/me/hoen/geofence_21/GeolocationService.java)
+```xml
+#!manifest.xml
+<service
+    android:name=".GeolocationService"
+    android:icon="@drawable/ic_launcher"
+    android:label="@string/app_name" >
+</service>
+```
+
 ```java
 public class GeolocationService extends Service implements ConnectionCallbacks,
     OnConnectionFailedListener, LocationListener {
@@ -257,6 +266,34 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         return null;
     }
 
+    public void onResult(Status status) {
+        if (status.isSuccess()) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.geofences_added), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            MainActivity.geofencesAlreadyRegistered = false;
+            String errorMessage = getErrorString(this, status.getStatusCode());
+            Toast.makeText(getApplicationContext(), errorMessage,
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String getErrorString(Context context, int errorCode) {
+        Resources mResources = context.getResources();
+        switch (errorCode) {
+        case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
+            return mResources.getString(R.string.geofence_not_available);
+        case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
+            return mResources.getString(R.string.geofence_too_many_geofences);
+        case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
+            return mResources
+                    .getString(R.string.geofence_too_many_pending_intents);
+        default:
+            return mResources.getString(R.string.unknown_geofence_error);
+        }
+    }
+
 }
 ```
 
@@ -317,6 +354,7 @@ public class MapFragment extends Fragment {
 ```
 
 ## [Creating a notification to display when a geofence hits a transition](./src/me/hoen/geofence_21/GeofenceNotification.java)
+
 ```java
 public class GeofenceNotification {
     public static final int NOTIFICATION_ID = 20;
@@ -383,14 +421,28 @@ public class GeofenceNotification {
 ```
 
 ## [Adding geofences](./src/me/hoen/geofence_21/GeolocationService.java)
+```xml
+#!manifest.xml
+
+<service
+    android:name=".GeofenceReceiver"
+    android:exported="false" >
+</service>
+
+<receiver
+    android:name=".GeofenceReceiver"
+    android:exported="false" >
+    <intent-filter>
+        <action android:name="me.hoen.geofence_21.ACTION_RECEIVE_GEOFENCE" />
+    </intent-filter>
+</receiver>
+```
+
 ```java
 public class GeolocationService extends Service implements ConnectionCallbacks,
-        OnConnectionFailedListener, LocationListener {
+        OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 
     private PendingIntent mPendingIntent;
-
-    public static final String ACTION_GEOFENCES_ERROR = "me.hoen.geofence_21.ACTION_GEOFENCES_ERROR";
-    public static final String ACTION_GEOFENCES_SUCCESS = "me.hoen.geofence_21.ACTION_GEOFENCES_SUCCESS";
 
     protected void registerGeofences() {
         if (MainActivity.geofencesAlreadyRegistered) {
@@ -414,7 +466,7 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         mPendingIntent = requestPendingIntent();
 
         LocationServices.GeofencingApi.addGeofences(mGoogleApiClient,
-                geofencingRequest, mPendingIntent);
+                geofencingRequest, mPendingIntent).setResultCallback(this);
 
         MainActivity.geofencesAlreadyRegistered = true;
     }
@@ -448,6 +500,34 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
         if (location.getAccuracy() <= 50) {
             Log.d(MainActivity.TAG, "Stopping geolocation service");
             stopSelf();
+        }
+    }
+
+    public void onResult(Status status) {
+        if (status.isSuccess()) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.geofences_added), Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            MainActivity.geofencesAlreadyRegistered = false;
+            String errorMessage = getErrorString(this, status.getStatusCode());
+            Toast.makeText(getApplicationContext(), errorMessage,
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public static String getErrorString(Context context, int errorCode) {
+        Resources mResources = context.getResources();
+        switch (errorCode) {
+        case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
+            return mResources.getString(R.string.geofence_not_available);
+        case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
+            return mResources.getString(R.string.geofence_too_many_geofences);
+        case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
+            return mResources
+                    .getString(R.string.geofence_too_many_pending_intents);
+        default:
+            return mResources.getString(R.string.unknown_geofence_error);
         }
     }
 }

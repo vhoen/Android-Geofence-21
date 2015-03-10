@@ -1,5 +1,6 @@
 package me.hoen.geofence_21;
 
+import me.hoen.android_geofence_21.R;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;

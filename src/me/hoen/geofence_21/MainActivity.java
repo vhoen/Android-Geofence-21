@@ -1,5 +1,6 @@
 package me.hoen.geofence_21;
 
+import me.hoen.android_geofence_21.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

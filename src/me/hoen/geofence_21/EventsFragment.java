@@ -2,6 +2,7 @@ package me.hoen.geofence_21;
 
 import java.util.ArrayList;
 
+import me.hoen.android_geofence_21.R;
 import me.hoen.geofence_21.db.Event;
 import me.hoen.geofence_21.db.EventDataSource;
 import android.os.Bundle;

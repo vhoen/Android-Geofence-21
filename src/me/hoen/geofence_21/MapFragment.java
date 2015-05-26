@@ -3,7 +3,6 @@ package me.hoen.geofence_21;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.hoen.android_geofence_21.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
